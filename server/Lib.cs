@@ -2,30 +2,24 @@ using SpacetimeDB;
 
 public static partial class Module
 {
-    [SpacetimeDB.Table]
-    public partial struct Person
+    public static void Main()
     {
-        [SpacetimeDB.AutoInc]
-        [SpacetimeDB.PrimaryKey]
-        public int Id;
-        public string Name;
-        public int Age;
+        
     }
 
-    [SpacetimeDB.Reducer]
-    public static void Add(ReducerContext ctx, string name, int age)
+    [Table(Name = "user", Public = true)]
+    public partial class User
     {
-        var person = ctx.Db.Person.Insert(new Person { Name = name, Age = age });
-        Log.Info($"Inserted {person.Name} under #{person.Id}");
+        [PrimaryKey] public Identity Identity;
+        public string? Name;
+        public bool Online;
     }
 
-    [SpacetimeDB.Reducer]
-    public static void SayHello(ReducerContext ctx)
+    [Table(Name = "user", Public = true)]
+    public partial class Message
     {
-        foreach (var person in ctx.Db.Person.Iter())
-        {
-            Log.Info($"Hello, {person.Name}!");
-        }
-        Log.Info("Hello, World!");
+        public Identity Sender;
+        public Timestamp Sent;
+        public string Text = "";
     }
 }
